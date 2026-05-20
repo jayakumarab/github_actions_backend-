@@ -11,44 +11,44 @@ jobs:
 
     steps:
 
-      # Step 1: Checkout Source Code
+      # Checkout Repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Setup Python
+      # Setup Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # Step 3: Install Dependencies
+      # Install Dependencies
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
 
-      # Step 4: Run Tests
+      # Run Tests
       - name: Run Tests
         run: |
           pytest
 
-      # Step 5: Login DockerHub
+      # Login DockerHub
       - name: Docker Login
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 6: Build Docker Image
+      # Build Docker Image
       - name: Build Docker Image
         run: |
-          docker build -t mybackendapp:latest .
+          docker build -t backend-app .
 
-      # Step 7: Tag Docker Image
+      # Tag Docker Image
       - name: Tag Docker Image
         run: |
-          docker tag mybackendapp:latest username/mybackendapp:latest
+          docker tag backend-app ${{ secrets.DOCKER_USERNAME }}/backend-app:latest
 
-      # Step 8: Push Docker Image
+      # Push Docker Image
       - name: Push Docker Image
         run: |
-          docker push username/mybackendapp:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/backend-app:latest
